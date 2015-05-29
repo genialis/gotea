@@ -41,6 +41,18 @@ void add_term(struct term_t *term)
 
 int link_terms()
 {
+	/*preprocess isa_for cache first; the inverses of these _should_ be subsets of the respective isa's*/
+	for (auto &i : tree)
+	{
+		struct term_t *t=i.second;
+		for (auto &j : t->isa_for)
+		{
+			if (tree.count(j)==0) { syslog(LOG_ERR,"term %s has nonexistent child '%s'",t->id,j); return 0; }
+			tree[j]->isa.insert(i.first);
+		}
+	}
+
+	/*now link term_t* parents and children by names*/
 	for (auto &i : tree)
 	{
 		struct term_t *t=i.second,*p;

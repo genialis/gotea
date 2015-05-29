@@ -98,7 +98,7 @@ static int obo_processor(char **out_buf, size_t *buf_len)
 					}
 					if (!strncmp(val,"has_part ",9))
 					{
-						term->isa.insert(val+9);
+						term->isa_for.insert(val+9);
 					}
 					if (!strncmp(val,"regulates ",10))
 					{

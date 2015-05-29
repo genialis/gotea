@@ -38,7 +38,7 @@ int parse_line_obo(char **section, char **key, char **value);
 struct term_t
 {
 	std::set<struct term_t*> parents,children;
-	std::set<const char*, ltstr> isa;
+	std::set<const char*, ltstr> isa,isa_for; /*isa_for is parent->child link cache in order to fill out isa's*/
 	const char *id,*name;
 	bool obsolete;
 
