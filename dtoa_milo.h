@@ -12,9 +12,9 @@
  *  - cleaned whitespace
  */
 
-#include <assert.h>
-#include <math.h>
-#include <stdint.h>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
 
 #define UINT64_C2(h, l) ((static_cast<uint64_t>(h) << 32) | static_cast<uint64_t>(l))
 
@@ -369,8 +369,8 @@ inline void Prettify(char* buffer, int length, int k) {
 
 inline int dtoa_milo(double value, char* buffer) {
 	// Not handling NaN and inf
-	assert(!isnan(value));
-	assert(!isinf(value));
+	assert(!std::isnan(value));
+	assert(!std::isinf(value));
 
 	if (value == 0) {
 		buffer[0] = '0';
