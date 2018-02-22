@@ -86,6 +86,10 @@ static int obo_processor(char **out_buf, size_t *buf_len)
 				{
 					term->name=val;
 				}
+				if (!strcmp(key,"namespace"))
+				{
+					term->name_space=val;;
+				}
 				if (!strcmp(key,"is_a"))
 				{
 					term->isa.insert(val);
@@ -115,7 +119,7 @@ static int obo_processor(char **out_buf, size_t *buf_len)
 				}
 				if (!strcmp(key,"is_obsolete") && !strcmp(val,"true"))
 				{
-					//term->obsolete=true; //XXX TODO odkomentiraj
+					term->obsolete=true;
 				}
 			}
 		}

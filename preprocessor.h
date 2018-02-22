@@ -39,7 +39,7 @@ struct term_t
 {
 	std::set<struct term_t*> parents,children;
 	std::set<const char*, ltstr> isa,isa_for; /*isa_for is parent->child link cache in order to fill out isa's*/
-	const char *id,*name;
+	const char *id,*name,*name_space;
 	bool obsolete;
 
 	ptrdiff_t i_parents,i_children,i_this,i_render;

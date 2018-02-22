@@ -35,7 +35,7 @@ static map<const char*, ptrdiff_t, ltstr> stringset;
 void add_term(struct term_t *term)
 {
 	if (term==NULL) { return; }
-	if (term==NULL || term->obsolete==true || tree.count(term->name)>0) { return; }
+	if (term==NULL || tree.count(term->name)>0) { return; }
 	tree[term->id]=term;
 }
 
@@ -163,6 +163,23 @@ int coagulate_terms(char **buf, size_t *buf_len)
 		it->nchildren=t->children.size();
 		it->id.idx=stringset[t->id];
 		it->name.idx=stringset[t->name];
+		it->flags.obsolete=t->obsolete;
+		if (!strcmp(t->name_space,"biological_process"))
+		{
+			it->flags.type=1;
+		}
+		if (!strcmp(t->name_space,"cellular_component"))
+		{
+			it->flags.type=2;
+		}
+		if (!strcmp(t->name_space,"molecular_function"))
+		{
+			it->flags.type=3;
+		}
+		if (it->flags.type!=0 && it->flags.obsolete==0 && t->parents.size()==0)
+		{
+			fprintf(stderr,"root term %s is a %d\n",t->id,(int)it->flags.type);
+		}
 
 		int renderlen;
 		it->prerender.idx=renderbuf-*buf;

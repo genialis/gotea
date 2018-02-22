@@ -128,7 +128,17 @@ struct int_term_t
 	} id,name,prerender;
 	struct quick_set_t genes,intersect;
 	float_type pval,score;
-	int prerender_len,genes_len,intersect_len,dumped;
+	int prerender_len,genes_len,intersect_len;
+	union
+	{
+		struct
+		{
+			unsigned dumped: 1;
+			unsigned type: 2;
+			unsigned obsolete: 1;
+		};
+		int all;
+	} flags;
 	long color;
 	char *genebuf;
 };

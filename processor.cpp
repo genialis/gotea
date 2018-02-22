@@ -336,7 +336,7 @@ static void termtree_dump_children(struct int_term_t *root)
 
 static void termtree_dump_term(struct int_term_t *root)
 {
-	root->dumped=1;
+	root->flags.dumped=1;
 	print_buf(root->prerender.str,root->prerender_len);
 	print_buf(root->genebuf,root->intersect_len);
 	print_buf(",\"children\":[",13);
@@ -492,19 +492,19 @@ int main(int argc, const char *argv[])
 	bool prevroot=false;
 	for (int i=(int)roots.size()-1;i>=0;i--)
 	{
-		if (!strcmp(roots[i]->id.str,"GO:0008150"))
+		if (roots[i]->flags.type == 1 && roots[i]->flags.obsolete == 0)
 		{
 			if (prevroot) { outbuf[outcursor++]=','; }
 			prevroot=true;
 			print_buf("\"BP\":[",6);
 		}
-		else if (!strcmp(roots[i]->id.str,"GO:0005575"))
+		else if (roots[i]->flags.type == 2 && roots[i]->flags.obsolete == 0)
 		{
 			if (prevroot) { outbuf[outcursor++]=','; }
 			prevroot=true;
 			print_buf("\"CC\":[",6);
 		}
-		else if (!strcmp(roots[i]->id.str,"GO:0003674"))
+		else if (roots[i]->flags.type == 3 && roots[i]->flags.obsolete == 0)
 		{
 			if (prevroot) { outbuf[outcursor++]=','; }
 			prevroot=true;
@@ -532,7 +532,7 @@ int main(int argc, const char *argv[])
 	bool first=true;
 	for (int i=0;i<nterms;i++)
 	{
-		if (!terms[i].dumped) { continue; }
+		if (!terms[i].flags.dumped) { continue; }
 		if (!first) { print_char(','); }
 		first=false;
 		print_buf(terms[i].genebuf+terms[i].intersect_len,terms[i].genes_len);
