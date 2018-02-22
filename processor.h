@@ -50,7 +50,9 @@ struct StrEq
 {
 	bool operator()(const char *str1, const char *str2) const
 	{
-		return strcmp(str1,str2)==0;
+		size_t len1=((size_t*)str1)[-2];
+		size_t len2=((size_t*)str2)[-2];
+		return len1==len2 && strcmp(str1,str2)==0;
 	}
 };
 struct PtrEq
