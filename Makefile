@@ -1,8 +1,5 @@
-OBJS=gafparser oboparser preprocessor termbuilder linkbuilder
-GOMPOBJS=processor
-
-CFLAGS=-Wall -Wextra -Wshadow -Winline -std=c++11 -lm -g
-FASTFLAGS=-fopenmp
+CFLAGS=-Wall -Wextra -Wshadow -Winline -std=c++11 -lm -O3
+FASTFLAGS=-fopenmp -fwhole-program
 
 SHELL=/bin/bash
 
@@ -10,25 +7,12 @@ SHELL=/bin/bash
 
 all: preprocessor processor
 
-%.d: %.cpp
-	-@echo "  DEP    $@"
-	@g++ -std=c++11 -MM $< > $@
--include $(OBJS:%=%.d) $(GOMPOBJS:%=%.d)
-
-$(OBJS:%=%.o): %.o: %.cpp
-	-@echo "  C++    $@"
-	@g++ $(CFLAGS) -c $< -o $@
-
-$(GOMPOBJS:%=%.o): %.o: %.cpp
-	-@echo "  MPC++  $@"
-	@g++ $(CFLAGS) $(FASTFLAGS) -c $< -o $@
-
-preprocessor: preprocessor.o oboparser.o gafparser.o termbuilder.o linkbuilder.o
-	-@echo "  LD     $@"
+preprocessor: preprocessor.cpp oboparser.cpp gafparser.cpp termbuilder.cpp linkbuilder.cpp
+	-@echo "  PROG   $@"
 	@g++ $(CFLAGS) $^ -o $@
 
-processor: processor.o
-	-@echo "  LD     $@"
+processor: processor.cpp
+	-@echo "  PROG   $@"
 	@g++ $(CFLAGS) $(FASTFLAGS) $^ -o $@
 
 formatter_test: formatters.cpp
@@ -45,6 +29,5 @@ test.out: processor obo.bin gaf.bin input_genes.txt
 	-@time ./processor 0.2 2 obo.bin gaf.bin input_genes.txt > test.out
 
 clean:
-	-rm $(OBJS:%=%.o) $(GOMPOBJS:%=%.o) preprocessor processor formatter_test
+	-rm preprocessor processor formatter_test
 distclean: clean
-	-rm $(OBJS:%=%.d) $(GOMPOBJS:%=%.d)
